@@ -2,8 +2,6 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
-// +build !nomsgpack
-
 package render
 
 import (
@@ -12,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/ugorji/go/codec"
+	"github.com/vmihailenco/msgpack/v5"
 )
 
 // TODO unit tests
@@ -31,11 +29,9 @@ func TestRenderMsgPack(t *testing.T) {
 
 	assert.NoError(t, err)
 
-	h := new(codec.MsgpackHandle)
-	assert.NotNil(t, h)
 	buf := bytes.NewBuffer([]byte{})
 	assert.NotNil(t, buf)
-	err = codec.NewEncoder(buf, h).Encode(data)
+	err = msgpack.NewEncoder(buf).Encode(data)
 
 	assert.NoError(t, err)
 	assert.Equal(t, w.Body.String(), string(buf.Bytes()))

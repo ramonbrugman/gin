@@ -2,8 +2,6 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
-// +build !nomsgpack
-
 package binding
 
 import (
@@ -12,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/ugorji/go/codec"
+	"github.com/vmihailenco/msgpack/v5"
 )
 
 func TestMsgpackBindingBindBody(t *testing.T) {
@@ -27,8 +25,7 @@ func TestMsgpackBindingBindBody(t *testing.T) {
 
 func msgpackBody(t *testing.T, obj interface{}) []byte {
 	var bs bytes.Buffer
-	h := &codec.MsgpackHandle{}
-	err := codec.NewEncoder(&bs, h).Encode(obj)
+	err := msgpack.NewEncoder(&bs).Encode(obj)
 	require.NoError(t, err)
 	return bs.Bytes()
 }

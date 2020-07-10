@@ -2,8 +2,6 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
-// +build !nomsgpack
-
 package binding
 
 import (
@@ -11,7 +9,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/ugorji/go/codec"
+	"github.com/vmihailenco/msgpack/v5"
 )
 
 type msgpackBinding struct{}
@@ -29,8 +27,7 @@ func (msgpackBinding) BindBody(body []byte, obj interface{}) error {
 }
 
 func decodeMsgPack(r io.Reader, obj interface{}) error {
-	cdc := new(codec.MsgpackHandle)
-	if err := codec.NewDecoder(r, cdc).Decode(&obj); err != nil {
+	if err := msgpack.NewDecoder(r).Decode(&obj); err != nil {
 		return err
 	}
 	return validate(obj)

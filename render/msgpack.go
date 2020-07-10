@@ -2,14 +2,12 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
-// +build !nomsgpack
-
 package render
 
 import (
 	"net/http"
 
-	"github.com/ugorji/go/codec"
+	"github.com/vmihailenco/msgpack/v5"
 )
 
 var (
@@ -36,6 +34,5 @@ func (r MsgPack) Render(w http.ResponseWriter) error {
 // WriteMsgPack writes MsgPack ContentType and encodes the given interface object.
 func WriteMsgPack(w http.ResponseWriter, obj interface{}) error {
 	writeContentType(w, msgpackContentType)
-	var mh codec.MsgpackHandle
-	return codec.NewEncoder(w, &mh).Encode(obj)
+	return msgpack.NewEncoder(w).Encode(obj)
 }
